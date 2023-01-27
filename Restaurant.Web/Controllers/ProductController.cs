@@ -14,7 +14,7 @@ namespace Restaurant.Web.Controllers
             _productService = productService;
         }
 
-        public async Task<IActionResult> ProductIndex()
+        public async Task<IActionResult> Index()
         {
             List<ProductDto> list = new();
             var response = await _productService.GetAllProductsAsync<ResponseDto>();
