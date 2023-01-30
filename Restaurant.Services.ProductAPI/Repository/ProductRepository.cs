@@ -20,9 +20,8 @@ namespace Restaurant.Services.ProductAPI.Repository
         public async Task<ProductDto> CreateUpdateProduct(ProductDto productDto)
         {
             Product product = _mapper.Map<ProductDto, Product>(productDto);
-            Product productFind = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productDto.ProductId);
 
-            if (productFind != null)
+            if (product.ProductId != Guid.Empty)
             {
                 _context.Products.Update(product);
             }

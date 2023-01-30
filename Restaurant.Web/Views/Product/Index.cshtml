@@ -1,8 +1,7 @@
 ﻿@model IEnumerable<Restaurant.Web.Models.ProductDto>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Products";
 }
 
 <br />
@@ -33,10 +32,10 @@
                     <td>@item.CategoryName</td>
                     <td>@((item.Price).ToString("c"))</td>
                     <td>
-                        <a asp-action="Edit" class="btn btn-success" asp-route-productId="@item.ProductId">
+                        <a asp-action="Update" class="btn btn-success" asp-route-productId="@item.ProductId">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a asp-action="Edit" class="btn btn-danger" asp-route-productId="@item.ProductId">
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-productId="@item.ProductId">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>

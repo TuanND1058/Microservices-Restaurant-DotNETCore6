@@ -1,13 +1,14 @@
 ﻿@model Restaurant.Web.Models.ProductDto
 
 @{
-    ViewData["Title"] = "Create Product";
+    ViewData["Title"] = "Update Product";
 }
 
-<form asp-action="Create">
+<form asp-action="Update">
+    <input asp-for="ProductId" hidden />
     <br />
     <div class="container border p-3">
-        <h1 class="text-primary">Create Product</h1>
+        <h1 class="text-primary">Update Product</h1>
 
         <hr />
         <div class="row">
@@ -51,7 +52,7 @@
                 <a asp-action="Index" class="btn-primary btn form-control ">Back to List</a>
             </div>
             <div class="col-5">
-                <input type="submit" value="Create" class="btn btn-success form-control" />
+                <input type="submit" value="Update" class="btn btn-success form-control" />
             </div>
         </div>
     </div>
