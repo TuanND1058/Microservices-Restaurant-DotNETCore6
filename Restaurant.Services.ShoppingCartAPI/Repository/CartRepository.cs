@@ -84,9 +84,17 @@ namespace Restaurant.Services.ShoppingCartAPI.Repository
             return _mapper.Map<CartDto>(cart);
         }
 
-        public Task<CartDto> GetCartByUserId(string userId)
+        public async Task<CartDto> GetCartByUserId(string userId)
         {
-            throw new NotImplementedException();
+            var cart = new Cart()
+            {
+                CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(x => x.UserId == userId)
+            };
+            cart.CartDetails = _context.CartDetails
+                .Where(x => x.CartHeaderId == cart.CartHeader.CartHeaderId)
+                .Include(x => x.Product);
+
+            return _mapper.Map<CartDto>(cart);
         }
 
         public Task<bool> RemoveFromCart(Guid cartDetailsId)
