@@ -97,9 +97,29 @@ namespace Restaurant.Services.ShoppingCartAPI.Repository
             return _mapper.Map<CartDto>(cart);
         }
 
-        public Task<bool> RemoveFromCart(Guid cartDetailsId)
+        public async Task<bool> RemoveFromCart(Guid cartDetailsId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cartDetails = await _context.CartDetails.FirstOrDefaultAsync(x => x.CartDetailsId == cartDetailsId);
+
+                int totalCountOfCartItems = _context.CartDetails.Where(x => x.CartHeaderId == cartDetails.CartHeaderId).Count();
+
+                _context.CartDetails.Remove(cartDetails);
+                if (totalCountOfCartItems == 1)
+                {
+                    var cartHeaderToRemove = await _context.CartHeaders.FirstOrDefaultAsync(x => x.CartHeaderId == cartDetails.CartHeaderId);
+                    _context.CartHeaders.Remove(cartHeaderToRemove);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
