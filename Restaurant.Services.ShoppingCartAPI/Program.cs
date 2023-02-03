@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Restaurant.Services.ShoppingCartAPI;
 using Restaurant.Services.ShoppingCartAPI.DbContexts;
+using Restaurant.Services.ShoppingCartAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ IMapper mapper = MappingConfig.ReisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//TODO
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 //=====
 
 builder.Services.AddControllers();
