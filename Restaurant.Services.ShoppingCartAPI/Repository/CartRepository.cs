@@ -17,9 +17,18 @@ namespace Restaurant.Services.ShoppingCartAPI.Repository
             _mapper = mapper;
         }
 
-        public Task<bool> ClearCart(string userId)
+        public async Task<bool> ClearCart(string userId)
         {
-            throw new NotImplementedException();
+            var cartHeaderFromDb = await _context.CartHeaders.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (cartHeaderFromDb != null)
+            {
+                _context.CartDetails.RemoveRange(_context.CartDetails.Where(x => x.CartHeaderId == cartHeaderFromDb.CartHeaderId));
+                _context.CartHeaders.Remove(cartHeaderFromDb);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<CartDto> CreateUpdateCart(CartDto cartDto)
