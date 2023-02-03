@@ -30,6 +30,19 @@ namespace Restaurant.Web.Controllers
             return View(products);
         }
 
+        [Authorize]
+        public async Task<IActionResult> Details(Guid productId)
+        {
+            var product = new ProductDto();
+            var response = await _productService.GetProductByIdAsync<ResponseDto>(productId, "");
+            if (response != null && response.IsSuccess)
+            {
+                product = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
+            }
+
+            return View(product);
+        }
+
         public IActionResult Privacy()
         {
             return View();
