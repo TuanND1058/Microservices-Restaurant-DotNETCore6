@@ -9,7 +9,7 @@ namespace Restaurant.Services.ProductAPI.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public ProductRepository(ApplicationDbContext context, IMapper mapper)
         {

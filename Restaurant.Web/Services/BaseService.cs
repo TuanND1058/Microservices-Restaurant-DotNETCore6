@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Restaurant.Web.Models;
 using Restaurant.Web.Services.IServices;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Restaurant.Web.Services
@@ -8,20 +9,20 @@ namespace Restaurant.Web.Services
     public class BaseService : IBaseService
     {
         public ResponseDto responseModel { get; set; }
-        public IHttpClientFactory httpClient { get; set; }
+        public IHttpClientFactory HttpClient { get; set; }
 
         public BaseService(IHttpClientFactory httpClient)
         {
             this.responseModel = new ResponseDto();
-            this.httpClient = httpClient;
+            this.HttpClient = httpClient;
         }
 
         public async Task<T> SendAsync<T>(ApiRequest apiRequest)
         {
             try
             {
-                var client = httpClient.CreateClient("RestaurantAPI");
-                HttpRequestMessage message = new HttpRequestMessage();
+                var client = HttpClient.CreateClient("RestaurantAPI");
+                var message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(apiRequest.Url);
                 client.DefaultRequestHeaders.Clear();
@@ -31,24 +32,21 @@ namespace Restaurant.Web.Services
                     message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data), Encoding.UTF8, "application/json");
                 }
 
-                HttpResponseMessage apiResponse = null;
-
-                switch (apiRequest.ApiType)
+                if (!string.IsNullOrEmpty(apiRequest.AccessToken))
                 {
-                    case SD.ApiType.POST:
-                        message.Method = HttpMethod.Post;
-                        break;
-                    case SD.ApiType.PUT:
-                        message.Method = HttpMethod.Put;
-                        break;
-                    case SD.ApiType.DELETE:
-                        message.Method = HttpMethod.Delete;
-                        break;
-                    default:
-                        message.Method = HttpMethod.Get;
-                        break;
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.AccessToken);
                 }
 
+                HttpResponseMessage apiResponse = null;
+
+                message.Method = apiRequest.ApiType switch
+                {
+                    SD.ApiType.POST => HttpMethod.Post,
+                    SD.ApiType.PUT => HttpMethod.Put,
+                    SD.ApiType.DELETE => HttpMethod.Delete,
+                    SD.ApiType.GET => HttpMethod.Get,
+                    _ => HttpMethod.Get,
+                };
                 apiResponse = await client.SendAsync(message);
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
