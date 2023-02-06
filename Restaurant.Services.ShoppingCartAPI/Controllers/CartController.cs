@@ -14,6 +14,7 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
         public CartController(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;
+            this._response = new ResponseDto();
         }
 
         [HttpGet("GetCart/{userId}")]

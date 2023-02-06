@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Restaurant.Web;
 using Restaurant.Web.Services;
 using Restaurant.Web.Services.IServices;
@@ -28,6 +29,8 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = "restaurant";
     options.ClientSecret = "secret";
     options.ResponseType = "code";
+    options.ClaimActions.MapJsonKey("role", "role", "role");
+    options.ClaimActions.MapJsonKey("sub", "sub", "sub");
 
     options.TokenValidationParameters.NameClaimType = "name";
     options.TokenValidationParameters.RoleClaimType = "role";
