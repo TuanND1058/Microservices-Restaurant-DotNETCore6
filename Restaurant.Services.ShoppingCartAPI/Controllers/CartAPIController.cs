@@ -66,11 +66,12 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("RemoveCart")]
-        public async Task<object> RemoveCart(Guid cartId)
+        public async Task<object> RemoveCart(object cartId)
         {
             try
             {
-                bool isSuccess = await _cartRepository.RemoveFromCart(cartId);
+                var value = Guid.Parse(cartId.ToString());
+                bool isSuccess = await _cartRepository.RemoveFromCart(value);
                 _response.Result = isSuccess;
             }
             catch (Exception ex)

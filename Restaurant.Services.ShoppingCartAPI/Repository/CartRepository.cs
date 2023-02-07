@@ -62,7 +62,7 @@ namespace Restaurant.Services.ShoppingCartAPI.Repository
                 //if header is not null
                 //check if details has same product
                 var cartDetailsFromDb = await _context.CartDetails.AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.CartHeaderId == cartHeaderFromDb.CartHeaderId && x.ProductId == cart.CartDetails.FirstOrDefault().ProductId);
+                    .FirstOrDefaultAsync(x => x.ProductId == cart.CartDetails.FirstOrDefault().ProductId && x.CartHeaderId == cartHeaderFromDb.CartHeaderId);
                 if (cartDetailsFromDb == null)
                 {
                     //create details
@@ -76,6 +76,8 @@ namespace Restaurant.Services.ShoppingCartAPI.Repository
                     //update the count / cart details
                     cart.CartDetails.FirstOrDefault().Count += cartDetailsFromDb.Count;
                     cart.CartDetails.FirstOrDefault().Product = null;
+                    cart.CartDetails.FirstOrDefault().CartDetailsId = cartDetailsFromDb.CartDetailsId;
+                    cart.CartDetails.FirstOrDefault().CartHeaderId = cartDetailsFromDb.CartHeaderId;
                     _context.CartDetails.Update(cart.CartDetails.FirstOrDefault());
                     await _context.SaveChangesAsync();
                 }

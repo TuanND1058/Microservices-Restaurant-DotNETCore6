@@ -44,5 +44,20 @@ namespace Restaurant.Web.Controllers
 
             return cartDto;
         }
+
+        public async Task<IActionResult> Remove(Guid cartDetailsId)
+        {
+            var userId = User.Claims.Where(x => x.Type == "sub")?.FirstOrDefault().Value;
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var response = await _cartService.RemoveToFromCartAsync<ResponseDto>(cartDetailsId, accessToken);
+
+            CartDto cartDto = new();
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
     }
 }
