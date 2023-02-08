@@ -8,5 +8,7 @@ namespace Restaurant.Web.Services.IServices
         Task<T> AddToCartAsync<T>(CartDto cartDto, string token = null);
         Task<T> UpdateCartAsync<T>(CartDto cartDto, string token = null);
         Task<T> RemoveToFromCartAsync<T>(Guid cartId, string token = null);
+        Task<T> ApplyCoupon<T>(CartDto cartDto, string token = null);
+        Task<T> RemoveCoupon<T>(string userId, string token = null);
     }
 }

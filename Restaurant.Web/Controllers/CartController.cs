@@ -22,6 +22,36 @@ namespace Restaurant.Web.Controllers
             return View(await LoadartDtoBasedOnLoggedInUser());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+            var userId = User.Claims.Where(x => x.Type == "sub")?.FirstOrDefault().Value;
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var response = await _cartService.ApplyCoupon<ResponseDto>(cartDto, accessToken);
+
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            var userId = User.Claims.Where(x => x.Type == "sub")?.FirstOrDefault().Value;
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var response = await _cartService.RemoveCoupon<ResponseDto>(cartDto.CartHeader.UserId, accessToken);
+
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
         private async Task<CartDto> LoadartDtoBasedOnLoggedInUser()
         {
             var userId = User.Claims.Where(x => x.Type == "sub")?.FirstOrDefault().Value;
