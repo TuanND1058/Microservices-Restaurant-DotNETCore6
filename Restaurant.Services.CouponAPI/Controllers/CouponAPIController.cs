@@ -6,12 +6,12 @@ namespace Restaurant.Services.CouponAPI.Controllers
 {
     [ApiController]
     [Route("api/coupon")]
-    public class CouponController : Controller
+    public class CouponAPIController : Controller
     {
         private readonly ICouponRepository _couponRepository;
         protected ResponseDto _response;
 
-        public CouponController(ICouponRepository cartRepository)
+        public CouponAPIController(ICouponRepository cartRepository)
         {
             _couponRepository = cartRepository;
             this._response = new ResponseDto();
