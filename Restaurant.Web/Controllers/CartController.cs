@@ -30,6 +30,27 @@ namespace Restaurant.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Checkout(CartDto cartDto)
+        {
+            try
+            {
+                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var response = await _cartService.Checkout<ResponseDto>(cartDto.CartHeader, accessToken);
+
+                return RedirectToAction(nameof(Confirmation));
+            }
+            catch (Exception)
+            {
+                return View(cartDto);
+            }
+        }
+
+        public async Task<IActionResult> Confirmation()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
         {
             var userId = User.Claims.Where(x => x.Type == "sub")?.FirstOrDefault().Value;
