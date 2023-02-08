@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Restaurant.Services.CouponAPI.Models;
+using Restaurant.Services.CouponAPI.Models.Dto;
 
 namespace Restaurant.Services.CouponAPI
 {
@@ -8,7 +10,7 @@ namespace Restaurant.Services.CouponAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-
+                config.CreateMap<CouponDto, Coupon>().ReverseMap();
             });
 
             return mappingConfig;
