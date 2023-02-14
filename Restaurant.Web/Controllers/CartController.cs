@@ -100,7 +100,7 @@ namespace Restaurant.Web.Controllers
                     if (coupon != null && response.IsSuccess)
                     {
                         var couponObj = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(coupon.Result));
-                        cartDto.CartHeader.DiscounrTotal = couponObj.DiscountAmount;
+                        cartDto.CartHeader.DiscountTotal = couponObj.DiscountAmount;
                     }
                 }
 
@@ -109,7 +109,7 @@ namespace Restaurant.Web.Controllers
                     cartDto.CartHeader.OrderTotal += (detail.Product.Price * detail.Count);
                 }
 
-                cartDto.CartHeader.OrderTotal -= cartDto.CartHeader.DiscounrTotal;
+                cartDto.CartHeader.OrderTotal -= cartDto.CartHeader.DiscountTotal;
                 if (cartDto.CartHeader.OrderTotal < 0)
                 {
                     cartDto.CartHeader.OrderTotal = 0;

@@ -6,7 +6,7 @@
         <input asp-for="CartHeader.UserId" hidden />
         <input asp-for="CartHeader.CartHeaderId" hidden />
         <input asp-for="CartHeader.CouponCode" hidden />
-        <input asp-for="CartHeader.DiscounrTotal" hidden />
+        <input asp-for="CartHeader.DiscountTotal" hidden />
         <input asp-for="CartHeader.OrderTotal" hidden />
 
         <div>
@@ -93,9 +93,9 @@
                             <div class="row">
                                 <div class="col-12 text-right pr-4 text-danger">
                                     Order Total : @string.Format("{0:c}", Model.CartHeader.OrderTotal)<br />
-                                    @if (Model.CartHeader.DiscounrTotal > 0)
+                                    @if (Model.CartHeader.DiscountTotal > 0)
                                     {
-                                        <span class="text-success">Order Discount : @string.Format("{0:c}", Model.CartHeader.DiscounrTotal)</span>
+                                        <span class="text-success">Order Discount : @string.Format("{0:c}", Model.CartHeader.DiscountTotal)</span>
                                     }
                                 </div>
                             </div>
