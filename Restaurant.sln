@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Services.CouponA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{EF3F200C-37CA-4F2C-8ABE-D5BD55E6F4DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.MessageBus", "Restaurant.MessageBus\Restaurant.MessageBus.csproj", "{9A6B10B9-698B-485A-A38E-97DE7408BB70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.MessageBus", "Restaurant.MessageBus\Restaurant.MessageBus.csproj", "{9A6B10B9-698B-485A-A38E-97DE7408BB70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Services.OrderAPI", "Restaurant.Services.OrderAPI\Restaurant.Services.OrderAPI.csproj", "{DDB8985D-3F78-4627-AC90-C324AA8FAB73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Services.OrderAPI", "Restaurant.Services.OrderAPI\Restaurant.Services.OrderAPI.csproj", "{DDB8985D-3F78-4627-AC90-C324AA8FAB73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

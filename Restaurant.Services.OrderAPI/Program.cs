@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Restaurant.Services.OrderAPI;
 using Restaurant.Services.OrderAPI.DbContexts;
+using Restaurant.Services.OrderAPI.Extension;
+using Restaurant.Services.OrderAPI.Messaging;
 using Restaurant.Services.OrderAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,9 +21,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+optionBuilder.UseSqlServer(connectionString);
 
 builder.Services.AddSingleton(new OrderRepository(optionBuilder.Options));
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 //=====
 
 builder.Services.AddControllers();
@@ -89,5 +92,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseAzureServiceBusConsumer();
 
 app.Run();
