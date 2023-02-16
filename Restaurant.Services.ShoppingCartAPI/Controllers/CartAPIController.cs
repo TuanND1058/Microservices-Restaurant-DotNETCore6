@@ -11,12 +11,14 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
+        private readonly ICouponRepository _couponRepository;
         private readonly IMessageBus _messageBus;
         protected ResponseDto _response;
 
-        public CartController(ICartRepository cartRepository, IMessageBus messageBus)
+        public CartController(ICartRepository cartRepository, IMessageBus messageBus, ICouponRepository couponRepository)
         {
             _cartRepository = cartRepository;
+            _couponRepository = couponRepository;
             _messageBus = messageBus;
             this._response = new ResponseDto();
         }
@@ -127,6 +129,19 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
                 {
                     return BadRequest();
                 }
+
+                if (!string.IsNullOrEmpty(checkoutHeaderDto.CouponCode))
+                {
+                    CouponDto coupon = await _couponRepository.GetCoupon(checkoutHeaderDto.CouponCode);
+                    if (checkoutHeaderDto.DiscountTotal != coupon.DiscountAmount)
+                    {
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages = new List<string> { "Coupon Price has changed, please confirm" };
+                        _response.DisplayMessage = "Coupon Price has change, please confirm";
+                        return _response;
+                    }
+                }
+
                 checkoutHeaderDto.CartDetails = cartDto.CartDetails;
                 //logic to add message to process order
                 await _messageBus.PublishMessage(checkoutHeaderDto, "Checkoutmessagetopic");
