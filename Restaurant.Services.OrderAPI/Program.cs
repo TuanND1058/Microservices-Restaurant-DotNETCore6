@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Restaurant.MessageBus;
 using Restaurant.Services.OrderAPI;
 using Restaurant.Services.OrderAPI.DbContexts;
 using Restaurant.Services.OrderAPI.Extension;
@@ -25,6 +26,7 @@ optionBuilder.UseSqlServer(connectionString);
 
 builder.Services.AddSingleton(new OrderRepository(optionBuilder.Options));
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+builder.Services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
 //=====
 
 builder.Services.AddControllers();
