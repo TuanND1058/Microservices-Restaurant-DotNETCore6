@@ -144,7 +144,8 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
 
                 checkoutHeaderDto.CartDetails = cartDto.CartDetails;
                 //logic to add message to process order
-                await _messageBus.PublishMessage(checkoutHeaderDto, "Checkoutmessagetopic");
+                await _messageBus.PublishMessage(checkoutHeaderDto, "checkoutqueue");
+                await _cartRepository.ClearCart(checkoutHeaderDto.UserId);
             }
             catch (Exception ex)
             {
