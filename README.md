@@ -87,6 +87,14 @@ Learn Microservices architecture with .NET Core MVC(.NET 6) and Identity Server 
 6. Newtonsoft.Json 13.0.2
 7. Swashbuckle.AspNetCore 6.2.3
 
+#### Restaurant.Services.Email
+
+1. Azure.Messaging.ServiceBus 7.12.0
+2. Microsoft.EntityFrameworkCore.Design 6.0.13
+3. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
+4. Newtonsoft.Json 13.0.2
+5. Swashbuckle.AspNetCore 6.2.3
+
 ### NuGet Integration
 
 #### Restaurant.MessageBus
