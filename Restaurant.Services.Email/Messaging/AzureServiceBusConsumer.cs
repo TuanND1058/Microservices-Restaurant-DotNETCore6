@@ -1,6 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Newtonsoft.Json;
 using Restaurant.Services.Email.Messages;
+using Restaurant.Services.Email.Repository;
 using System.Text;
 
 namespace Restaurant.Services.Email.Messaging
@@ -8,43 +9,31 @@ namespace Restaurant.Services.Email.Messaging
     public class AzureServiceBusConsumer : IAzureServiceBusConsumer
     {
         private readonly string serviceBusConnectionString;
-        private readonly string subscriptionCheckOut;
-        private readonly string checkoutMessageTopic;
-        private readonly string orderPaymentProcessTopic;
+        private readonly string subscriptionEmail;
         private readonly string orderUpdatePaymentResultTopic;
 
-        private readonly OrderRepository _orderRepository;
+        private readonly EmailRepository _emailRepository;
 
-        private readonly ServiceBusProcessor checkOutProcessor;
         private ServiceBusProcessor orderUpdatePaymentStatusProcessor;
 
         private readonly IConfiguration _configuration;
-        private readonly IMessageBus _messageBus;
 
-        public AzureServiceBusConsumer(OrderRepository orderRepository, IConfiguration configuration, IMessageBus messageBus)
+        public AzureServiceBusConsumer(EmailRepository emailRepository, IConfiguration configuration)
         {
-            _orderRepository = orderRepository;
+            _emailRepository = emailRepository;
             _configuration = configuration;
-            _messageBus = messageBus;
 
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
-            subscriptionCheckOut = _configuration.GetValue<string>("SubscriptionCheckOut");
-            checkoutMessageTopic = _configuration.GetValue<string>("CheckoutMessageTopic");
-            orderPaymentProcessTopic = _configuration.GetValue<string>("OrderPaymentProcessTopics");
-            orderUpdatePaymentResultTopic = _configuration.GetValue<string>("OrderUpdatePaymentResultTopic");
+            subscriptionEmail = _configuration.GetValue<string>("SubscriptionName");
+            orderUpdatePaymentResultTopic = _configuration.GetValue<string>("orderupdatepaymentresulttopic");
 
             var client = new ServiceBusClient(serviceBusConnectionString);
 
-            checkOutProcessor = client.CreateProcessor(checkoutMessageTopic, subscriptionCheckOut);
-            orderUpdatePaymentStatusProcessor = client.CreateProcessor(orderUpdatePaymentResultTopic, subscriptionCheckOut);
+            orderUpdatePaymentStatusProcessor = client.CreateProcessor(orderUpdatePaymentResultTopic, subscriptionEmail);
         }
 
         public async Task Start()
         {
-            checkOutProcessor.ProcessMessageAsync += OnCheckOutMessageReceived;
-            checkOutProcessor.ProcessErrorAsync += ErrorHandler;
-            await checkOutProcessor.StartProcessingAsync();
-
             orderUpdatePaymentStatusProcessor.ProcessMessageAsync += OnOrderPaymentUpdateReceived;
             orderUpdatePaymentStatusProcessor.ProcessErrorAsync += ErrorHandler;
             await orderUpdatePaymentStatusProcessor.StartProcessingAsync();
@@ -52,9 +41,6 @@ namespace Restaurant.Services.Email.Messaging
 
         public async Task Stop()
         {
-            await checkOutProcessor.StopProcessingAsync();
-            await checkOutProcessor.DisposeAsync();
-
             await orderUpdatePaymentStatusProcessor.StopProcessingAsync();
             await orderUpdatePaymentStatusProcessor.DisposeAsync();
         }
@@ -65,78 +51,22 @@ namespace Restaurant.Services.Email.Messaging
             return Task.CompletedTask;
         }
 
-        private async Task OnCheckOutMessageReceived(ProcessMessageEventArgs args)
+        private async Task OnOrderPaymentUpdateReceived(ProcessMessageEventArgs args)
         {
             var message = args.Message;
             var body = Encoding.UTF8.GetString(message.Body);
 
-            CheckoutHeaderDto checkoutHeaderDto = JsonConvert.DeserializeObject<CheckoutHeaderDto>(body);
-
-            OrderHeader orderHeader = new()
-            {
-                UserId = checkoutHeaderDto.UserId,
-                FirstName = checkoutHeaderDto.FirstName,
-                LastName = checkoutHeaderDto.LastName,
-                OrderDetails = new List<OrderDetails>(),
-                CardNumber = checkoutHeaderDto.CardNumber,
-                CouponCode = checkoutHeaderDto.CouponCode,
-                CVV = checkoutHeaderDto.CVV,
-                DiscountTotal = checkoutHeaderDto.DiscountTotal,
-                Email = checkoutHeaderDto.Email,
-                ExpiryMonthYear = checkoutHeaderDto.ExpiryMonthYear,
-                OrderTime = DateTime.Now,
-                OrderTotal = checkoutHeaderDto.OrderTotal,
-                PaymentStatus = false,
-                Phone = checkoutHeaderDto.Phone,
-                PickupDateTime = checkoutHeaderDto.PickupDateTime
-            };
-
-            foreach (var detailsList in checkoutHeaderDto.CartDetails)
-            {
-                OrderDetails orderDetails = new()
-                {
-                    ProductId = detailsList.ProductId,
-                    ProductName = detailsList.Product.Name,
-                    Price = detailsList.Product.Price,
-                    Count = detailsList.Count
-                };
-                orderHeader.CartTotalItems += detailsList.Count;
-                orderHeader.OrderDetails.Add(orderDetails);
-            }
-
-            await _orderRepository.AddOrder(orderHeader);
-
-            PaymentRequestMessage paymentRequestMessage = new()
-            {
-                Name = orderHeader.FirstName + " " + orderHeader.LastName,
-                CardNumber = orderHeader.CardNumber,
-                CVV = orderHeader.CVV,
-                ExpiryMonthYear = orderHeader.ExpiryMonthYear,
-                OrderId = orderHeader.OrderHeaderId,
-                OrderTotal = orderHeader.OrderTotal,
-                Email = orderHeader.Email
-            };
+            UpdatePaymentResultMessage objMessage = JsonConvert.DeserializeObject<UpdatePaymentResultMessage>(body);
 
             try
             {
-                await _messageBus.PublishMessage(paymentRequestMessage, orderPaymentProcessTopic);
+                await _emailRepository.SendAndLogEmail(objMessage);
                 await args.CompleteMessageAsync(args.Message);
             }
             catch (Exception)
             {
                 throw;
             }
-        }
-
-        private async Task OnOrderPaymentUpdateReceived(ProcessMessageEventArgs args)
-        {
-            var message = args.Message;
-            var body = Encoding.UTF8.GetString(message.Body);
-
-            UpdatePaymentResultMessage paymentResultMessage = JsonConvert.DeserializeObject<UpdatePaymentResultMessage>(body);
-
-            await _orderRepository.UpdateOrderPaymentStatus(paymentResultMessage.OrderId, paymentResultMessage.Status);
-            await args.CompleteMessageAsync(args.Message);
         }
     }
 }

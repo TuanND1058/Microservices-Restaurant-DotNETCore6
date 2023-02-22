@@ -1,4 +1,4 @@
-﻿using Restaurant.Services.Email.Messages;
+﻿using Restaurant.Services.Email.Messaging;
 
 namespace Restaurant.Services.Email.Extension
 {
