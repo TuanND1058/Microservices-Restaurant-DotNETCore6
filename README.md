@@ -32,39 +32,26 @@ Learn Microservices architecture with .NET Core MVC(.NET 6) and Identity Server 
 4. Newtonsoft.Json 13.0.2
 5. System.IdentityModel.Tokens.Jwt 6.26.0
 
-### NuGet Backend
+### NuGet Gateway
 
-#### Restaurant.Services.ProductAPI
+#### Restaurant.GatewaySolution
 
-1. AutoMapper 12.0.1
-2. AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.0
-3. Microsoft.AspNetCore.Authentication.JwtBearer 6.0.13
-4. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
-5. Microsoft.EntityFrameworkCore.Tools 6.0.13
-6. Swashbuckle.AspNetCore 6.5.0
-7. Swashbuckle.AspNetCore.Annotations 6.5.0
-8. Swashbuckle.AspNetCore.SwaggerUI 6.5.0
+1. IdentityModel 6.0.0
+2. Microsoft.AspNetCore.Authentication.JwtBearer 6.0.13
+3. Ocelot 18.0.0
 
-#### Restaurant.Services.Identity
+### NuGet Integration
 
-1. Duende.IdentityServer.AspNetIdentity 5.2.4
-2. Microsoft.AspNetCore.Identity.EntityFrameworkCore 6.0.13
-3. Microsoft.AspNetCore.Identity.UI 6.0.13
-4. Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation 6.0.13
-5. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
-6. Microsoft.EntityFrameworkCore.Tools 6.0.13
+#### Restaurant.MessageBus
 
-#### Restaurant.Services.ShoppingCartAPI
+1. Azure.Messaging.ServiceBus 7.12.0
+2. Newtonsoft.Json 13.0.2
 
-1. AutoMapper 12.0.1
-2. AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.0
-3. Microsoft.AspNetCore.Authentication.JwtBearer 6.0.13
-4. Microsoft.EntityFrameworkCore.Design 6.0.13
-5. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
-6. Newtonsoft.Json 13.0.2
-7. Swashbuckle.AspNetCore 6.5.0
-8. Swashbuckle.AspNetCore.Annotations 6.5.0
-9. Swashbuckle.AspNetCore.SwaggerUI 6.5.0
+### NuGet Payments
+
+#### PaymentProcessor
+
+### NuGet Services
 
 #### Restaurant.Services.CouponAPI
 
@@ -77,6 +64,23 @@ Learn Microservices architecture with .NET Core MVC(.NET 6) and Identity Server 
 7. Swashbuckle.AspNetCore.Annotations 6.5.0
 8. Swashbuckle.AspNetCore.SwaggerUI 6.5.0
 
+#### Restaurant.Services.Email
+
+1. Azure.Messaging.ServiceBus 7.12.0
+2. Microsoft.EntityFrameworkCore.Design 6.0.13
+3. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
+4. Newtonsoft.Json 13.0.2
+5. Swashbuckle.AspNetCore 6.2.3
+
+#### Restaurant.Services.Identity
+
+1. Duende.IdentityServer.AspNetIdentity 5.2.4
+2. Microsoft.AspNetCore.Identity.EntityFrameworkCore 6.0.13
+3. Microsoft.AspNetCore.Identity.UI 6.0.13
+4. Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation 6.0.13
+5. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
+6. Microsoft.EntityFrameworkCore.Tools 6.0.13
+
 #### Restaurant.Services.OrderAPI
 
 1. AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.0
@@ -87,17 +91,29 @@ Learn Microservices architecture with .NET Core MVC(.NET 6) and Identity Server 
 6. Newtonsoft.Json 13.0.2
 7. Swashbuckle.AspNetCore 6.2.3
 
-#### Restaurant.Services.Email
+#### Restaurant.Services.PaymentAPI
 
-1. Azure.Messaging.ServiceBus 7.12.0
-2. Microsoft.EntityFrameworkCore.Design 6.0.13
-3. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
-4. Newtonsoft.Json 13.0.2
-5. Swashbuckle.AspNetCore 6.2.3
+1. Swashbuckle.AspNetCore 6.5.0
 
-### NuGet Integration
+#### Restaurant.Services.ProductAPI
 
-#### Restaurant.MessageBus
+1. AutoMapper 12.0.1
+2. AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.0
+3. Microsoft.AspNetCore.Authentication.JwtBearer 6.0.13
+4. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
+5. Microsoft.EntityFrameworkCore.Tools 6.0.13
+6. Swashbuckle.AspNetCore 6.5.0
+7. Swashbuckle.AspNetCore.Annotations 6.5.0
+8. Swashbuckle.AspNetCore.SwaggerUI 6.5.0
 
-1. Azure.Messaging.ServiceBus 7.12.0
-2. Newtonsoft.Json 13.0.2
+#### Restaurant.Services.ShoppingCartAPI
+
+1. AutoMapper 12.0.1
+2. AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.0
+3. Microsoft.AspNetCore.Authentication.JwtBearer 6.0.13
+4. Microsoft.EntityFrameworkCore.Design 6.0.13
+5. Microsoft.EntityFrameworkCore.SqlServer 6.0.13
+6. Newtonsoft.Json 13.0.2
+7. Swashbuckle.AspNetCore 6.5.0
+8. Swashbuckle.AspNetCore.Annotations 6.5.0
+9. Swashbuckle.AspNetCore.SwaggerUI 6.5.0
